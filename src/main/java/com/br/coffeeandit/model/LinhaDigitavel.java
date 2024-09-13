@@ -1,4 +1,8 @@
 package com.br.coffeeandit.model;
 
-public record LinhaDigitavel(String linha, String uuid) {
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+public record LinhaDigitavel(
+        @Schema(description = "Linha Digitável") String linha,
+        @Schema(description = "UUID gerado") String uuid) {
 }
