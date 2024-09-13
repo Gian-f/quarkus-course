@@ -9,6 +9,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkus:quarkus-redis-cache'
     implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-info'
@@ -16,7 +17,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-resteasy-reactive'
     implementation 'com.google.zxing:core:3.5.2'
     implementation 'commons-io:commons-io:2.13.0'
-    implementation 'org.json:json:20230618'
+    implementation 'org.json:json:20231013'
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }
