@@ -4,13 +4,9 @@ import com.br.coffeeandit.model.Chave;
 import com.br.coffeeandit.model.LinhaDigitavel;
 import com.br.coffeeandit.model.StatusPix;
 import com.br.coffeeandit.model.Transaction;
-import com.br.coffeeandit.repository.TransacaoPixMongoClientRepository;
 import com.br.coffeeandit.repository.TransactionPanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import jakarta.transaction.Transactional;
-import org.bson.Document;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -35,7 +31,7 @@ public class TransactionDomain {
         }
     }
 
-    public List<Transaction> buscarTranscoes(final Date dataInicio, final Date dataFim) {
+    public List<Transaction> buscarTransacoes(final Date dataInicio, final Date dataFim) {
         return repository.buscarTransacoes(dataInicio, dataFim);
     }
 

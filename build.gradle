@@ -9,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkus:quarkus-smallrye-reactive-messaging-kafka'
+    implementation 'io.quarkiverse.amazonservices:quarkus-amazon-s3'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-amazon-services-bom:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-mongodb-panache'
     implementation 'io.quarkus:quarkus-mongodb-client'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
@@ -17,7 +20,7 @@ dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-info'
     implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-resteasy-reactive'
+    implementation group: 'software.amazon.awssdk', name: 'url-connection-client', version: '2.21.10'
     implementation 'com.google.zxing:core:3.5.2'
     implementation 'commons-io:commons-io:2.13.0'
     implementation 'org.json:json:20231013'

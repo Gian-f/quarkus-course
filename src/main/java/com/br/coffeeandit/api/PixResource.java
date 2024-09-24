@@ -96,7 +96,7 @@ public class PixResource {
             description = "Data do Fim no formato yyyy-MM-dd"
     )
     public Response buscarTransacoes(@QueryParam("dataInicio") String dataInicio, @QueryParam("dataFim") String dataFim) throws ParseException {
-        return Response.ok(pixService.buscarTranscoes(SIMPLE_DATE_FORMAT.parse(dataInicio), SIMPLE_DATE_FORMAT.parse(dataFim))).build();
+        return Response.ok(pixService.buscarTransacoes(SIMPLE_DATE_FORMAT.parse(dataInicio), SIMPLE_DATE_FORMAT.parse(dataFim))).build();
     }
 
     @Consumes(MediaType.APPLICATION_JSON)

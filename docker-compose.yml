@@ -26,6 +26,15 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: coffeeandit
       ME_CONFIG_MONGODB_URL: mongodb://root:coffeeandit@mongo:27017/
+  localstack:
+        image: localstack/localstack:1.4.0
+        ports:
+          - "4566:4566"  # Porta principal do LocalStack
+        environment:
+          - SERVICES=s3  # Serviço habilitado (S3)
+          - START_WEB=0  # Interface web desativada
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"  # Para suportar outros serviços locais
 
 volumes:
   mongodbdata:
