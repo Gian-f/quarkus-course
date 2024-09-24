@@ -5,6 +5,7 @@ import com.br.coffeeandit.model.LinhaDigitavel;
 import com.br.coffeeandit.model.StatusPix;
 import com.br.coffeeandit.model.Transaction;
 import com.br.coffeeandit.repository.TransacaoPixMongoClientRepository;
+import com.br.coffeeandit.repository.TransactionPanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -12,15 +13,16 @@ import jakarta.transaction.Transactional;
 import org.bson.Document;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class TransactionDomain {
 
     @Inject
-    TransacaoPixMongoClientRepository repository;
+    TransactionPanacheRepository repository;
 
-    @Transactional
     public void adicionarTransacao(final LinhaDigitavel linhaDigitavel, final BigDecimal valor, final Chave chave) {
         repository.adicionar(linhaDigitavel, valor, chave);
     }
@@ -33,6 +35,10 @@ public class TransactionDomain {
         }
     }
 
+    public List<Transaction> buscarTranscoes(final Date dataInicio, final Date dataFim) {
+        return repository.buscarTransacoes(dataInicio, dataFim);
+    }
+
     public Optional<Transaction> reprovarTransacao(final String uuid) {
         return repository.alterarStatusTransacao(uuid, StatusPix.APROVED);
     }
@@ -42,7 +48,6 @@ public class TransactionDomain {
     }
 
     public Optional<Transaction> findById(final String uuid) {
-        Optional<Document> optionalDocument = repository.findOne(uuid);
-        return optionalDocument.map(TransactionConverterApply::apply);
+        return repository.findOne(uuid);
     }
 }

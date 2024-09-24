@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,6 +74,10 @@ public class PixService {
 
     private void processarPix() {
 
+    }
+
+    public List<Transaction> buscarTranscoes(final Date dataInicio, final Date dataFim) {
+        return transactionDomain.buscarTranscoes(dataInicio, dataFim);
     }
 
     public Optional<Transaction> reprovarTransacao(final String uuid) {

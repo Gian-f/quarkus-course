@@ -1,12 +1,15 @@
 package com.br.coffeeandit.model;
 
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Transaction {
+@MongoEntity(collection = "transcacao_pix")
+public class Transaction extends PanacheMongoEntity {
 
     @Override
     public boolean equals(Object o) {
