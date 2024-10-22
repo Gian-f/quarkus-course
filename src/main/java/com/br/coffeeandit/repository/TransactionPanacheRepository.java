@@ -24,11 +24,12 @@ public class TransactionPanacheRepository implements PanacheMongoRepository<Tran
         var transaction = new Transaction();
         transaction.setChave(chave.chave());
         transaction.setData(LocalDateTime.now(ZoneId.of(AMERICA_SAO_PAULO)));
+        transaction.setId(linhaDigitavel.uuid());
         transaction.setStatus(StatusPix.CREATED);
         transaction.setValor(valor);
         transaction.setLinha(linhaDigitavel.linha());
         transaction.setTipoChave(chave.tipoChave().toString());
-        transaction.persist();
+        transaction.persistOrUpdate();
     }
 
     public Optional<Transaction> alterarStatusTransacao(String uuid, StatusPix statusPix) {
@@ -47,6 +48,7 @@ public class TransactionPanacheRepository implements PanacheMongoRepository<Tran
     }
 
     public List<Transaction> buscarTransacoes(final Date dataInicio, final Date dataFim) {
-        return find("data >= ?1 and data <=2 and status = ?3", dataInicio, dataFim, StatusPix.APROVED).stream().collect(Collectors.toList());
+        return find("data >= ?1 and data <= ?2 and status = ?3", dataInicio, dataFim, StatusPix.APPROVED)
+                .stream().collect(Collectors.toList());
     }
 }

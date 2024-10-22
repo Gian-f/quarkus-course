@@ -10,6 +10,7 @@ import com.br.coffeeandit.model.qrcode.QrCode;
 import com.br.coffeeandit.repository.S3ImageClientRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -36,6 +37,9 @@ public class PixService {
     @Inject
     S3ImageClientRepository s3ImageClientRepository;
 
+    @ConfigProperty(name = "quarkus.s3.enabled")
+    Boolean s3Enabled;
+
 
     public BufferedInputStream gerarQrCode(final String uuid) {
         return new BufferedInputStream(s3ImageClientRepository.getObjects(uuid).asInputStream());
@@ -45,26 +49,19 @@ public class PixService {
 
         var qrCode = new QrCode(new DadosEnvio(chave, valor, cidadeRemetente));
         var uuid = UUID.randomUUID().toString();
-        Path dirPath = Path.of(QRCODE_PATH);
-        if (!Files.exists(dirPath)) {
-            try {
-                Files.createDirectories(dirPath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
         var imagePath = QRCODE_PATH + uuid + ".png";
-
+        if(!Files.exists(dirPath))
         qrCode.save(Path.of(imagePath));
-        salvarImagem(imagePath, uuid);
+        salvarImagem(uuid, imagePath);
         String qrCodeString = qrCode.toString();
         var linhaDigitavel = new LinhaDigitavel(qrCodeString, uuid);
         salvarLinhaDigitavel(chave, valor, linhaDigitavel);
         return linhaDigitavel;
     }
 
-    private void salvarImagem(String imagePath, String uuid) {
-        s3ImageClientRepository.putObject(Paths.get(imagePath), uuid);
+    private void salvarImagem(String uuid, String imagePath) {
+        if (s3Enabled)
+            s3ImageClientRepository.putObject(Paths.get(imagePath), uuid);
     }
 
     private void salvarLinhaDigitavel(Chave chave, BigDecimal valor, LinhaDigitavel linhaDigitavel) {

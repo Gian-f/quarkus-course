@@ -5,6 +5,7 @@ import com.br.coffeeandit.model.Pix;
 import com.br.coffeeandit.model.Transaction;
 import com.br.coffeeandit.service.DictService;
 import com.br.coffeeandit.service.PixService;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -22,15 +23,15 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @Path("/v1/pix")
+@Authenticated
 public class PixResource {
 
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     DictService dictService;
 
     @Inject
     PixService pixService;
-
-    public static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Operation(description = "API para criar uma linha digitável")
     @APIResponseSchema(LinhaDigitavel.class)
@@ -69,6 +70,7 @@ public class PixResource {
             @APIResponse(responseCode = "404", description = "Recurso não encontrado")
     })
     public Response buscarPix(@PathParam("uuid") String uuid) {
+
         return Response.ok(pixService.findById(uuid)).build();
     }
 
@@ -93,15 +95,16 @@ public class PixResource {
     @Parameter(
             name = "dataFim",
             in = ParameterIn.QUERY,
-            description = "Data do Fim no formato yyyy-MM-dd"
+            description = "Data de Fim no formato yyyy-MM-dd"
     )
-    public Response buscarTransacoes(@QueryParam("dataInicio") String dataInicio, @QueryParam("dataFim") String dataFim) throws ParseException {
-        return Response.ok(pixService.buscarTransacoes(SIMPLE_DATE_FORMAT.parse(dataInicio), SIMPLE_DATE_FORMAT.parse(dataFim))).build();
+    public Response buscarTransacoes(@QueryParam(value = "dataInicio") String dataInicio, @QueryParam(value = "dataFim") String dataFim) throws ParseException {
+        return Response.ok(pixService.buscarTransacoes(DATE_FORMAT.parse(dataInicio),
+                DATE_FORMAT.parse(dataFim))).build();
     }
 
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/aprovar/{uuid}")
+    @Path("/{uuid}/aprovar")
     @PATCH
     @Operation(description = "API responsável por aprovar um pagamento PIX")
     @APIResponseSchema(Transaction.class)
@@ -136,7 +139,7 @@ public class PixResource {
 
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/reprovar/{uuid}")
+    @Path("/{uuid}/reprovar")
     @DELETE
     @Operation(description = "API responsável por reprovar um pagamento PIX")
     @APIResponseSchema(Transaction.class)

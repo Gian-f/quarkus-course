@@ -3,7 +3,7 @@ package com.br.coffeeandit.model;
 public enum StatusPix {
     CREATED,
     IN_PROCESS,
-    APROVED,
+    APPROVED,
     REPROVED,
     DONE,
     UNDONE,
